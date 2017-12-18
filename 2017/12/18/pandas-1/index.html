@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="pandas," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="芝士就是力量">
-<meta property="og:type" content="website">
-<meta property="og:title" content="m&#39;s blog">
-<meta property="og:url" content="https://actmerce.github.io/index.html">
+<meta name="description" content="今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。 今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何获取新的数据以及更新了的数据。 123456789101112131415161718192021222324252627282930313">
+<meta name="keywords" content="pandas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「pandas笔记」对比两个dataframe">
+<meta property="og:url" content="https://actmerce.github.io/2017/12/18/pandas-1/index.html">
 <meta property="og:site_name" content="m&#39;s blog">
-<meta property="og:description" content="芝士就是力量">
+<meta property="og:description" content="今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。 今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何获取新的数据以及更新了的数据。 123456789101112131415161718192021222324252627282930313">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-18T13:49:27.402Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="m&#39;s blog">
-<meta name="twitter:description" content="芝士就是力量">
+<meta name="twitter:title" content="「pandas笔记」对比两个dataframe">
+<meta name="twitter:description" content="今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。 今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何获取新的数据以及更新了的数据。 123456789101112131415161718192021222324252627282930313">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://actmerce.github.io/"/>
+  <link rel="canonical" href="https://actmerce.github.io/2017/12/18/pandas-1/"/>
 
 
 
 
 
-  <title>m's blog</title>
+  <title>「pandas笔记」对比两个dataframe | m's blog</title>
   
 
 
@@ -143,8 +145,7 @@
     
   
 
-  <div class="container sidebar-position-right 
-  page-home">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +238,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -269,9 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/18/pandas-1/" itemprop="url">「pandas笔记」对比两个dataframe</a></h1>
+          <h1 class="post-title" itemprop="name headline">「pandas笔记」对比两个dataframe</h1>
         
 
         <div class="post-meta">
@@ -343,9 +342,7 @@
       
 
       
-        
-          
-            <p>今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。</p>
+        <p>今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。</p>
 <p>今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何获取新的数据以及更新了的数据。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> chardet</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_file_encoding</span><span class="params">(file_path)</span>:</span></span><br><span class="line">    f = open(file_path, <span class="string">'rb'</span>)</span><br><span class="line">    file_encoding = chardet.detect(f.read())[<span class="string">'encoding'</span>]</span><br><span class="line">    f.close()</span><br><span class="line">    <span class="keyword">return</span> file_encoding</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_df</span><span class="params">(file_path, id_name, field_list)</span>:</span></span><br><span class="line">    <span class="comment"># 获取file 的编码格式</span></span><br><span class="line">    file_encoding = get_file_encoding(file_path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 初始化df，包括把id_name替换成索引，以及替换nan为空，不然会有异常，最后再来一个过滤显示的字段</span></span><br><span class="line">    df = pd.read_csv(file_path, encoding=file_encoding).set_index([id_name])[field_list].fillna(<span class="string">''</span>).sort_index()</span><br><span class="line">    <span class="keyword">return</span> df</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">contrast_df</span><span class="params">(new_path, old_path, id_name, field_list, save_file_path=<span class="string">'./auto_create/'</span>)</span>:</span></span><br><span class="line">    <span class="comment"># 把id的列移除list</span></span><br><span class="line">    field_list.pop(field_list.index(id_name))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取file_name</span></span><br><span class="line">    file_name = new_path.split(<span class="string">'/'</span>)[<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取新旧的df</span></span><br><span class="line">    new_df = get_df(new_path, id_name, field_list)</span><br><span class="line">    old_df = get_df(old_path, id_name, field_list)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 比较数据是否有更新前，须要先看是否有新增的数据，不然size不同会报错</span></span><br><span class="line">    old_index = old_df.index.values</span><br><span class="line">    add_df = new_df[~new_df.index.isin(old_index)]</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> add_df.empty:</span><br><span class="line">        print(<span class="string">'有&#123;&#125;条数据新插入了'</span>.format(len(add_df)))</span><br><span class="line">        <span class="comment"># 把新增的数据从new_df 中删除</span></span><br><span class="line">        add_index = add_df.index.values</span><br><span class="line">        new_df = new_df[~new_df.index.isin(add_index)]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 新建csv文件</span></span><br><span class="line">        add_df.to_csv(save_file_path + <span class="string">'add_'</span> + file_name)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'没有数据新插入'</span>)</span><br><span class="line">        </span><br><span class="line">    ne_stacked = (new_df != old_df).stack()</span><br><span class="line">    changed = ne_stacked[ne_stacked]</span><br><span class="line">    changed.index.names = [<span class="string">'ID_P'</span>, <span class="string">'col'</span>]</span><br><span class="line">    changed_index = set([seri[<span class="number">0</span>] <span class="keyword">for</span> seri <span class="keyword">in</span> changed.index])</span><br><span class="line">    update_df = new_df[new_df.index.isin(changed_index)]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> update_df.empty:</span><br><span class="line">        print(<span class="string">'有&#123;&#125;条数据更新'</span>.format(len(update_df)))</span><br><span class="line">        <span class="comment"># 新建csv文件</span></span><br><span class="line">        update_df.to_csv(save_file_path + <span class="string">'update_'</span> + file_name)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'没有数据更新'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> add_df, update_df</span><br></pre></td></tr></table></figure>
 <p>基本思路是：</p>
@@ -368,8 +365,6 @@
 <li><a href="https://stackoverflow.com/questions/45947801/filtering-cosine-similarity-scores-into-a-pandas-dataframe?rq=1" target="_blank" rel="noopener">Filtering cosine similarity scores into a pandas dataframe</a></li>
 </ul>
 
-          
-        
       
     </div>
     
@@ -384,320 +379,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2017/12/06/django-xadmin-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mmm">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="m's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/06/django-xadmin-2/" itemprop="url">「xadmin开发笔记」后台添加数据时外键的回填</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-06T19:19:30+08:00">
-                2017-12-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Web开发/" itemprop="url" rel="index">
-                    <span itemprop="name">Web开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/pandas/" rel="tag"># pandas</a>
           
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在xadmin中关于user一般都设置了<code>relfield_style = &#39;fk-ajax&#39;</code>，项目中遇到有个实际情况就是，在新建一条用户的数据时，在编辑页面自动回填介绍人</p>
-<p>— 未完待续 —</p>
-<p>参考：</p>
-<ul>
-<li><a href="http://xadmin.readthedocs.io/en/docs-chinese/index.html" target="_blank" rel="noopener">xadmin文档</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
       
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2017/12/05/django-xadmin-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mmm">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="m's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/05/django-xadmin-1/" itemprop="url">「xadmin开发笔记」Admin中重载方法可实现的一些功能</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-05T17:54:50+08:00">
-                2017-12-05
-              </time>
+              <a href="/2017/12/06/django-xadmin-2/" rel="next" title="「xadmin开发笔记」后台添加数据时外键的回填">
+                <i class="fa fa-chevron-left"></i> 「xadmin开发笔记」后台添加数据时外键的回填
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Web开发/" itemprop="url" rel="index">
-                    <span itemprop="name">Web开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>方便举例，现在有个编辑教师的Admin</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TeacherAdmin</span><span class="params">(object)</span>:</span></span><br><span class="line">	<span class="keyword">pass</span></span><br><span class="line">	</span><br><span class="line">xadmin.site.register(Teacher, TeacherAdmin)</span><br></pre></td></tr></table></figure>
-<h3 id="在List页面将数据过滤显示"><a href="#在List页面将数据过滤显示" class="headerlink" title="在List页面将数据过滤显示"></a>在List页面将数据过滤显示</h3><p>可以通过重载<code>queryset()</code>去实现列表的过滤</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TeacherAdmin</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">queryset</span><span class="params">(self)</span>:</span></span><br><span class="line">        qs = super(TeacherAdmin, self).queryset()</span><br><span class="line">        qs = qs.filter(is_active=<span class="keyword">True</span>)  <span class="comment"># 过滤掉失效的数据</span></span><br><span class="line">    <span class="keyword">return</span> qs</span><br></pre></td></tr></table></figure>
-<p>现实项目中的用途可以用来过滤那些已经过期或者失效的数据。因为这个<code>queryset()</code>的方法不仅仅只是作用于List页面的过滤，还有其他的xadmin的功能，像关联字段的搜索。<br>同时，如果是有多个学校，学校的网站管理者只能操作管理员用户所属学校的教师数据，也可以在<code>queryset()</code>中实现。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TeacherAdmin</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">queryset</span><span class="params">(self)</span>:</span></span><br><span class="line">        qs = super(TeacherAdmin, self).queryset()</span><br><span class="line">        qs = qs.filter(is_active=<span class="keyword">True</span>, school=self.user.school)</span><br><span class="line">    <span class="keyword">return</span> qs</span><br></pre></td></tr></table></figure>
-<h3 id="将Edit页面中的外键进行过滤显示"><a href="#将Edit页面中的外键进行过滤显示" class="headerlink" title="将Edit页面中的外键进行过滤显示"></a>将Edit页面中的外键进行过滤显示</h3><p>可以通过重载<code>get_context()</code>去实现过滤<br>如果“A学校”跟“B学校”有很多不同的班级，须要对老师的<code>grade</code>的外键进行限制选择，那么就可以像这样，在编辑的页面对<code>grade</code>进行过滤。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TeacherAdmin</span><span class="params">(object)</span>:</span></span><br><span class="line">	...</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_context</span><span class="params">(self)</span>:</span></span><br><span class="line">        context = super(TeacherAdmin, self).get_context()</span><br><span class="line">        <span class="keyword">if</span> <span class="string">"form"</span> <span class="keyword">in</span> context:</span><br><span class="line">            context[<span class="string">"form"</span>].fields[<span class="string">"grade"</span>].queryset = Grade.objects.filter(</span><br><span class="line">                school=self.user.school)  <span class="comment"># 实现 grade 字段显示的过滤</span></span><br><span class="line">        <span class="keyword">return</span> context</span><br></pre></td></tr></table></figure>
-<p>上边这个<code>get_context()</code>只作用于普通的外键样式进行过滤，如果在<code>GradeAdmin</code>中对<code>grade</code>设置了<code>relfield_style = &#39;fk-ajax&#39;</code>，那么须要用到上边提到的<code>queryset()</code>进行过滤了。</p>
-<h3 id="Edit页面readonly-fields、exclude的设置"><a href="#Edit页面readonly-fields、exclude的设置" class="headerlink" title="Edit页面readonly_fields、exclude的设置"></a>Edit页面<code>readonly_fields</code>、<code>exclude</code>的设置</h3><p>在编辑页面设置某些只读的字段或者不显示的字段可以分别通过<code>readonly_fields</code>跟<code>exclude</code>去设置</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TeacherAdmin</span><span class="params">(object)</span>:</span></span><br><span class="line">    readonly_fields = (<span class="string">'name'</span>, )</span><br><span class="line">    exclude = (<span class="string">'school'</span>, )</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<p>但是如果须要根据自己的业务逻辑，根据当前操作管理员去动态改变该表单的字段的<code>readonly_fields</code>以及<code>exclude</code>的话，那么须要重载以下两个方法去实现功能</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TeacherAdmin</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># readonly_fields = ('name', )</span></span><br><span class="line">    <span class="comment"># exclude = ('school', )</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 动态设置readonly_fields</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_readonly_fields</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> SUPERUSER <span class="keyword">in</span> self.user.groups.all():  <span class="comment"># 随便加入自己的逻辑</span></span><br><span class="line">            readonly_fields = ()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            readonly_fields = (<span class="string">'name'</span>, )</span><br><span class="line">        <span class="keyword">return</span> readonly_fields</span><br><span class="line">        </span><br><span class="line">    <span class="comment"># 动态设置 exclude</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_model_form</span><span class="params">(self, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> SUPERUSER <span class="keyword">in</span> self.user.groups.all():  <span class="comment"># 随便加入自己的逻辑</span></span><br><span class="line">            self.exclude = ()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.exclude = (<span class="string">'school'</span>, )</span><br><span class="line">        <span class="keyword">return</span> super(StudentProfileAdmin, self).get_model_form(**kwargs)</span><br><span class="line">    </span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-<p>基本上通过上边的对From的过滤以及动态设置<code>readonly_fields</code>、<code>exclude</code>，可以满足到很大的一部分定制开发的需求了。<br>再加上xadmin中的<code>inlines</code>、重载<code>save_models()</code>定制Admin保存数据逻辑以及重载<code>get_form_layout()</code>完成页面样式配置，后端只需要修改小部分代码，就能实现很多功能。</p>
-<p>参考：</p>
-<ul>
-<li><a href="http://xadmin.readthedocs.io/en/docs-chinese/index.html" target="_blank" rel="noopener">xadmin文档</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -707,10 +418,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -718,6 +430,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -955,6 +671,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
