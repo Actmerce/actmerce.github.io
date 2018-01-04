@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Django,xadmin," />
+  <meta name="keywords" content="Python,unittest," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="在xadmin中关于user一般都设置了relfield_style = &amp;#39;fk-ajax&amp;#39;，项目中遇到有个实际情况就是，在新建一条用户的数据时，在编辑页面自动回填介绍人 — 未完待续 — 参考：  xadmin文档">
-<meta name="keywords" content="Django,xadmin">
+<meta name="description" content="通过main()去运行测试 1234...if __name__ == &apos;__main__&apos;:    unittest.main() 命令行接口方式进行测试 123python -m unittest test_module1 test_module2python -m unittest test_module.TestClasspython -m unittest test_module.Tes">
+<meta name="keywords" content="Python,unittest">
 <meta property="og:type" content="article">
-<meta property="og:title" content="「xadmin开发笔记」后台添加数据时外键的回填">
-<meta property="og:url" content="https://actmerce.github.io/2017/12/06/django-xadmin-2/index.html">
+<meta property="og:title" content="「unittest开发笔记」芝士点备忘">
+<meta property="og:url" content="https://actmerce.github.io/2018/01/02/unittest-1/index.html">
 <meta property="og:site_name" content="m&#39;s blog">
-<meta property="og:description" content="在xadmin中关于user一般都设置了relfield_style = &amp;#39;fk-ajax&amp;#39;，项目中遇到有个实际情况就是，在新建一条用户的数据时，在编辑页面自动回填介绍人 — 未完待续 — 参考：  xadmin文档">
+<meta property="og:description" content="通过main()去运行测试 1234...if __name__ == &apos;__main__&apos;:    unittest.main() 命令行接口方式进行测试 123python -m unittest test_module1 test_module2python -m unittest test_module.TestClasspython -m unittest test_module.Tes">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-18T13:21:22.000Z">
+<meta property="og:updated_time" content="2018-01-04T09:41:19.852Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="「xadmin开发笔记」后台添加数据时外键的回填">
-<meta name="twitter:description" content="在xadmin中关于user一般都设置了relfield_style = &amp;#39;fk-ajax&amp;#39;，项目中遇到有个实际情况就是，在新建一条用户的数据时，在编辑页面自动回填介绍人 — 未完待续 — 参考：  xadmin文档">
+<meta name="twitter:title" content="「unittest开发笔记」芝士点备忘">
+<meta name="twitter:description" content="通过main()去运行测试 1234...if __name__ == &apos;__main__&apos;:    unittest.main() 命令行接口方式进行测试 123python -m unittest test_module1 test_module2python -m unittest test_module.TestClasspython -m unittest test_module.Tes">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://actmerce.github.io/2017/12/06/django-xadmin-2/"/>
+  <link rel="canonical" href="https://actmerce.github.io/2018/01/02/unittest-1/"/>
 
 
 
 
 
-  <title>「xadmin开发笔记」后台添加数据时外键的回填 | m's blog</title>
+  <title>「unittest开发笔记」芝士点备忘 | m's blog</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2017/12/06/django-xadmin-2/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/01/02/unittest-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">「xadmin开发笔记」后台添加数据时外键的回填</h1>
+          <h1 class="post-title" itemprop="name headline">「unittest开发笔记」芝士点备忘</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-06T19:19:30+08:00">
-                2017-12-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T15:51:48+08:00">
+                2018-01-02
               </time>
             
 
@@ -305,8 +305,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Web开发/" itemprop="url" rel="index">
-                    <span itemprop="name">Web开发</span>
+                  <a href="/categories/基础/" itemprop="url" rel="index">
+                    <span itemprop="name">基础</span>
                   </a>
                 </span>
 
@@ -342,11 +342,91 @@
       
 
       
-        <p>在xadmin中关于user一般都设置了<code>relfield_style = &#39;fk-ajax&#39;</code>，项目中遇到有个实际情况就是，在新建一条用户的数据时，在编辑页面自动回填介绍人</p>
-<p>— 未完待续 —</p>
+        <p>通过<code>main()</code>去运行测试</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    unittest.main()</span><br></pre></td></tr></table></figure>
+<p>命令行接口方式进行测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -m unittest test_module1 test_module2</span><br><span class="line">python -m unittest test_module.TestClass</span><br><span class="line">python -m unittest test_module.TestClass.test_method</span><br></pre></td></tr></table></figure>
+<p>测试中主要通过3个方法进行判断是否正常：</p>
+<ol>
+<li><code>assertEqual()</code>去检查结果是否和期望的结果相同；</li>
+<li><code>assertTrue()</code>用于核实最终状态；</li>
+<li><code>assertRaises()</code>去检查是否抛出期望的异常。</li>
+</ol>
+<p>还有其他的一些如下表：</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Checks that</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>assertEqual(a, b)</td>
+<td>a == b</td>
+</tr>
+<tr>
+<td>assertNotEqual(a, b)</td>
+<td>a != b</td>
+</tr>
+<tr>
+<td>assertTrue(x)</td>
+<td>bool(x) is True</td>
+</tr>
+<tr>
+<td>assertFalse(x)</td>
+<td>bool(x) is False</td>
+</tr>
+<tr>
+<td>assertIs(a, b)</td>
+<td>a is b</td>
+</tr>
+<tr>
+<td>assertIsNot(a, b)</td>
+<td>a is not b</td>
+</tr>
+<tr>
+<td>assertIsNone(x)</td>
+<td>x is None</td>
+</tr>
+<tr>
+<td>assertIsNotNone(x)</td>
+<td>x is not None</td>
+</tr>
+<tr>
+<td>assertIn(a, b)</td>
+<td>a in b</td>
+</tr>
+<tr>
+<td>assertNotIn(a, b)</td>
+<td>a not in b</td>
+</tr>
+<tr>
+<td>assertIsInstance(a, b)</td>
+<td>isinstance(a, b)</td>
+</tr>
+<tr>
+<td>assertNotIsInstance(a, b)</td>
+<td>not isinstance(a, b)</td>
+</tr>
+<tr>
+<td>assertRaises(exc, fun, *args, **kwds)</td>
+<td>fun(*args, **kwds) raises exc</td>
+</tr>
+<tr>
+<td>assertRaisesRegexp(exc, r, fun, *args, **kwds)</td>
+<td>fun(*args, **kwds) raises exc and the message matches regex r</td>
+</tr>
+</tbody>
+</table>
+<p>在TestCase的类里，<code>setUp()</code>会先被加载，然后再去运行需要测试的方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomTestCase</span><span class="params">(unittest.TestCase)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setUp</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>如果实在生产环境下运行的测试，在一般情况下，是在<code>setUp()</code>创建或更新一些运行测试必要的数据，整个测试运行完后，<code>tearDown()</code>会被执行，删除或恢复数据的操作可以放在<code>tearDown()</code>里边，如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListApiTests</span><span class="params">(unittest.TestCase)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setUp</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 先创建一个测试的用户</span></span><br><span class="line">        user_info = &#123;</span><br><span class="line">            <span class="string">'username'</span>: <span class="string">'test_user_actmerce'</span>,</span><br><span class="line">            <span class="string">'password'</span>: make_password(<span class="string">'yoyoqiekenao'</span>),</span><br><span class="line">            <span class="string">'real_name'</span>: <span class="string">'晓测'</span></span><br><span class="line">        &#125;</span><br><span class="line">        user = UserProfile.objects.create(**user_info)</span><br><span class="line">        self.user = user</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tearDown</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 删除新增的数据</span></span><br><span class="line">        self.user.delete()</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_one</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 <p>参考：</p>
 <ul>
-<li><a href="http://xadmin.readthedocs.io/en/docs-chinese/index.html" target="_blank" rel="noopener">xadmin文档</a></li>
+<li><a href="http://python.usyiyi.cn/translate/python_278/library/unittest.html" target="_blank" rel="noopener">unittest中文文档</a></li>
+<li><a href="http://blogs.wrox.com/article/python-test-cases-and-test-suites/" target="_blank" rel="noopener">Python Test Cases and Test Suites</a></li>
 </ul>
 
       
@@ -365,9 +445,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Django/" rel="tag"># Django</a>
+            <a href="/tags/Python/" rel="tag"># Python</a>
           
-            <a href="/tags/xadmin/" rel="tag"># xadmin</a>
+            <a href="/tags/unittest/" rel="tag"># unittest</a>
           
         </div>
       
@@ -380,8 +460,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/05/django-xadmin-1/" rel="next" title="「xadmin开发笔记」Admin中重载方法可实现的一些功能">
-                <i class="fa fa-chevron-left"></i> 「xadmin开发笔记」Admin中重载方法可实现的一些功能
+              <a href="/2017/12/18/pandas-1/" rel="next" title="「pandas笔记」对比两个dataframe">
+                <i class="fa fa-chevron-left"></i> 「pandas笔记」对比两个dataframe
               </a>
             
           </div>
@@ -390,8 +470,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/18/pandas-1/" rel="prev" title="「pandas笔记」对比两个dataframe">
-                「pandas笔记」对比两个dataframe <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/02/env-1/" rel="prev" title="「环境配置笔记」Mac下安装mysqlclient">
+                「环境配置笔记」Mac下安装mysqlclient <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

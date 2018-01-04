@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。 今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何获取新的数据以及更新了的数据。 123456789101112131415161718192021222324252627282930313">
+<meta name="description" content="今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。 今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何通过对比两个dataframe获取新的数据以及更新了的数据。 123456789101112131415161718192021222324">
 <meta name="keywords" content="pandas">
 <meta property="og:type" content="article">
 <meta property="og:title" content="「pandas笔记」对比两个dataframe">
 <meta property="og:url" content="https://actmerce.github.io/2017/12/18/pandas-1/index.html">
 <meta property="og:site_name" content="m&#39;s blog">
-<meta property="og:description" content="今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。 今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何获取新的数据以及更新了的数据。 123456789101112131415161718192021222324252627282930313">
+<meta property="og:description" content="今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。 今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何通过对比两个dataframe获取新的数据以及更新了的数据。 123456789101112131415161718192021222324">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-18T13:49:27.402Z">
+<meta property="og:updated_time" content="2017-12-18T13:57:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="「pandas笔记」对比两个dataframe">
-<meta name="twitter:description" content="今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。 今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何获取新的数据以及更新了的数据。 123456789101112131415161718192021222324252627282930313">
+<meta name="twitter:description" content="今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。 今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何通过对比两个dataframe获取新的数据以及更新了的数据。 123456789101112131415161718192021222324">
 
 
 
@@ -343,14 +343,14 @@
 
       
         <p>今天撸代码撸的太难受了，pandas强大是强大，但是感觉国内用的不是太多，遇到一些问题不知道怎么去解决好，只能google。</p>
-<p>今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何获取新的数据以及更新了的数据。</p>
+<p>今天遇到问题主要是对比两个不同时间、同个数据库导出的csv文件。因为本人这次主要用pandas去处理csv文件，那么随之而来的就是如何通过对比两个dataframe获取新的数据以及更新了的数据。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> chardet</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_file_encoding</span><span class="params">(file_path)</span>:</span></span><br><span class="line">    f = open(file_path, <span class="string">'rb'</span>)</span><br><span class="line">    file_encoding = chardet.detect(f.read())[<span class="string">'encoding'</span>]</span><br><span class="line">    f.close()</span><br><span class="line">    <span class="keyword">return</span> file_encoding</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_df</span><span class="params">(file_path, id_name, field_list)</span>:</span></span><br><span class="line">    <span class="comment"># 获取file 的编码格式</span></span><br><span class="line">    file_encoding = get_file_encoding(file_path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 初始化df，包括把id_name替换成索引，以及替换nan为空，不然会有异常，最后再来一个过滤显示的字段</span></span><br><span class="line">    df = pd.read_csv(file_path, encoding=file_encoding).set_index([id_name])[field_list].fillna(<span class="string">''</span>).sort_index()</span><br><span class="line">    <span class="keyword">return</span> df</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">contrast_df</span><span class="params">(new_path, old_path, id_name, field_list, save_file_path=<span class="string">'./auto_create/'</span>)</span>:</span></span><br><span class="line">    <span class="comment"># 把id的列移除list</span></span><br><span class="line">    field_list.pop(field_list.index(id_name))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取file_name</span></span><br><span class="line">    file_name = new_path.split(<span class="string">'/'</span>)[<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取新旧的df</span></span><br><span class="line">    new_df = get_df(new_path, id_name, field_list)</span><br><span class="line">    old_df = get_df(old_path, id_name, field_list)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 比较数据是否有更新前，须要先看是否有新增的数据，不然size不同会报错</span></span><br><span class="line">    old_index = old_df.index.values</span><br><span class="line">    add_df = new_df[~new_df.index.isin(old_index)]</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> add_df.empty:</span><br><span class="line">        print(<span class="string">'有&#123;&#125;条数据新插入了'</span>.format(len(add_df)))</span><br><span class="line">        <span class="comment"># 把新增的数据从new_df 中删除</span></span><br><span class="line">        add_index = add_df.index.values</span><br><span class="line">        new_df = new_df[~new_df.index.isin(add_index)]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 新建csv文件</span></span><br><span class="line">        add_df.to_csv(save_file_path + <span class="string">'add_'</span> + file_name)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'没有数据新插入'</span>)</span><br><span class="line">        </span><br><span class="line">    ne_stacked = (new_df != old_df).stack()</span><br><span class="line">    changed = ne_stacked[ne_stacked]</span><br><span class="line">    changed.index.names = [<span class="string">'ID_P'</span>, <span class="string">'col'</span>]</span><br><span class="line">    changed_index = set([seri[<span class="number">0</span>] <span class="keyword">for</span> seri <span class="keyword">in</span> changed.index])</span><br><span class="line">    update_df = new_df[new_df.index.isin(changed_index)]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> update_df.empty:</span><br><span class="line">        print(<span class="string">'有&#123;&#125;条数据更新'</span>.format(len(update_df)))</span><br><span class="line">        <span class="comment"># 新建csv文件</span></span><br><span class="line">        update_df.to_csv(save_file_path + <span class="string">'update_'</span> + file_name)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'没有数据更新'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> add_df, update_df</span><br></pre></td></tr></table></figure>
 <p>基本思路是：</p>
 <ol>
 <li>先把新增的数据移除，并保存成新的csv文件；</li>
 <li>两个新旧的<code>dataframe</code>进行比较；</li>
 <li>通过行列转化的形式获取<code>changed</code>,并从中获得发生改变的数据的<code>index</code>；</li>
-<li>将跟新的数据保存成新的csv文件。</li>
+<li>将更新的数据保存成新的csv文件。</li>
 </ol>
 <p>最后补充一下：</p>
 <ol>
@@ -403,6 +403,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/02/unittest-1/" rel="prev" title="「unittest开发笔记」芝士点备忘">
+                「unittest开发笔记」芝士点备忘 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -470,7 +474,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -492,7 +496,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -556,7 +560,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
