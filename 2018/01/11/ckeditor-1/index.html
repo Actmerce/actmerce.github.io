@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/m-180.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/m-32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/m-16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/m.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ckeditor,Django,Python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="之前在副文本上一直使用百度家的UEditor，但是官方在Django以及python3.X上没有做维护，所以换上了ckeditor，使用下来还算方便。 环境信息：  python 3.6.2 Django 2.0.1 django-ckeditor 5.4.0  正文：  用pip安装ckeditor： 1pip install django-ckeditor  在settings的INSTALL">
+<meta name="keywords" content="ckeditor,Django,Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「Django富文本」django-ckeditor的使用">
+<meta property="og:url" content="https://actmerce.github.io/2018/01/11/ckeditor-1/index.html">
+<meta property="og:site_name" content="m&#39;s blog">
+<meta property="og:description" content="之前在副文本上一直使用百度家的UEditor，但是官方在Django以及python3.X上没有做维护，所以换上了ckeditor，使用下来还算方便。 环境信息：  python 3.6.2 Django 2.0.1 django-ckeditor 5.4.0  正文：  用pip安装ckeditor： 1pip install django-ckeditor  在settings的INSTALL">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://actmerce.github.io/images/django-ckeditor.jpg">
+<meta property="og:updated_time" content="2018-01-11T07:01:37.928Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="「Django富文本」django-ckeditor的使用">
+<meta name="twitter:description" content="之前在副文本上一直使用百度家的UEditor，但是官方在Django以及python3.X上没有做维护，所以换上了ckeditor，使用下来还算方便。 环境信息：  python 3.6.2 Django 2.0.1 django-ckeditor 5.4.0  正文：  用pip安装ckeditor： 1pip install django-ckeditor  在settings的INSTALL">
+<meta name="twitter:image" content="https://actmerce.github.io/images/django-ckeditor.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://actmerce.github.io/2018/01/11/ckeditor-1/"/>
+
+
+
+
+
+  <title>「Django富文本」django-ckeditor的使用 | m's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">m's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">🧀🧀🧀</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/01/11/ckeditor-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mmm">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">「Django富文本」django-ckeditor的使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-11T14:17:33+08:00">
+                2018-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
+                    <span itemprop="name">Web开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前在副文本上一直使用百度家的UEditor，但是官方在Django以及python3.X上没有做维护，所以换上了ckeditor，使用下来还算方便。</p>
+<p><strong>环境信息：</strong></p>
+<ul>
+<li>python 3.6.2</li>
+<li>Django 2.0.1</li>
+<li>django-ckeditor 5.4.0</li>
+</ul>
+<p><strong>正文：</strong></p>
+<ol>
+<li><p>用pip安装ckeditor：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django-ckeditor</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>settings</code>的<code>INSTALLED_APPS</code>注册：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = [</span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">    <span class="string">'ckeditor'</span>,</span><br><span class="line">    <span class="string">'ckeditor_uploader'</span>,  <span class="comment"># 如果富文本中允许用户上传图片/文件到后台，则需要加上</span></span><br><span class="line">	</span><br><span class="line">	...</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置上传文件路径（如果用到上传功能）：<br>ckeditor的上传路径是讲<code>media</code>的路径后边拼接<code>upload_path</code>，也就是说按照下边的配置，最终的上传路径为`/media/uploads/</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MEDIA_URL = <span class="string">'/media/'</span></span><br><span class="line">MEDIA_ROOT = os.path.join(BASE_DIR, <span class="string">'media'</span>)</span><br><span class="line">CKEDITOR_UPLOAD_PATH = <span class="string">"uploads/"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在settings中按需定制自己的富文本面板（非必须）：<br>可以按照自己的喜好，定制富文本的编辑工具面板，下边这个是我花了点时间选出了一些常用以及实用的功能。其中具体参数含义可以到官方文档查询。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">CKEDITOR_CONFIGS = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'toolbar_ToolbarConfig'</span>: [</span><br><span class="line">            &#123;<span class="string">'name'</span>: <span class="string">'basic'</span>, <span class="string">'items'</span>: [</span><br><span class="line">                <span class="string">'Font'</span>, <span class="string">'FontSize'</span>, <span class="string">'BGColor'</span>, <span class="string">'TextColor'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Bold'</span>, <span class="string">'Italic'</span>, <span class="string">'Underline'</span>, <span class="string">'Strike'</span>, <span class="string">'Undo'</span>, <span class="string">'Redo'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Strike'</span>, <span class="string">'Subscript'</span>, <span class="string">'Superscript'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Image'</span>, <span class="string">'Flash'</span>, <span class="string">'Table'</span>, <span class="string">'HorizontalRule'</span>, <span class="string">'SpecialChar'</span>,</span><br><span class="line">            ]&#125;,</span><br><span class="line">            <span class="string">'/'</span>,</span><br><span class="line">            &#123;<span class="string">'name'</span>: <span class="string">'custom'</span>, <span class="string">'items'</span>: [</span><br><span class="line">                <span class="string">'Source'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Preview'</span>, <span class="string">'Maximize'</span>,</span><br><span class="line">            ]&#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">'toolbar'</span>: <span class="string">'ToolbarConfig'</span>,</span><br><span class="line">        <span class="string">'width'</span>: <span class="string">'100%'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>field的使用方式：<br>这里的上传功能有个小坑，我开始一直没找着为什么不能开启上传功能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"><span class="keyword">from</span> ckeditor.fields <span class="keyword">import</span> RichTextField</span><br><span class="line"><span class="keyword">from</span> ckeditor_uploader.fields <span class="keyword">import</span> RichTextUploadingField</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    content_without_upload = RichTextField()  <span class="comment"># 不带上传功能的富文本</span></span><br><span class="line">    content_with_upload = RichTextUploadingField()  <span class="comment"># 带上传功能的富文本（需要先在INSTALL_APP中声明）</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>效果：<br><img src="https://actmerce.github.io/images/django-ckeditor.jpg" alt="django-ckeditor后台效果"></p>
+</li>
+<li><p>后记：<br>在前后端分离的开发过程中，富文本内所插入的图片需要返回绝对路径，查了许多文档，ckeditor没有像百度的UEditor一样把<code>url_prefix</code>放出来，方便设置。后来我摸索了一下，改动了一下源码就可以实现功能了。文件路径<code>ckeditor_uploader/util.py</code>中的<code>get_media_url(path)</code>，具体如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_media_url</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Determine system file's media URL.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    url_prefix = hasattr(settings, <span class="string">'CKEDITOR_URL_PREFIX'</span>) <span class="keyword">and</span> settings.CKEDITOR_URL_PREFIX <span class="keyword">or</span> <span class="string">''</span></span><br><span class="line">    <span class="keyword">return</span> url_prefix + default_storage.url(path)</span><br></pre></td></tr></table></figure>
+<p> 随后只需要在<code>settings</code>中加入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CKEDITOR_URL_PREFIX = <span class="string">'https://actmerce.github.io'</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<p><strong>参考：</strong></p>
+<ul>
+<li><a href="https://github.com/django-ckeditor/django-ckeditor" target="_blank" rel="noopener">django-ckeditor 文档</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ckeditor/" rel="tag"># ckeditor</a>
+          
+            <a href="/tags/Django/" rel="tag"># Django</a>
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/02/env-1/" rel="next" title="「环境配置笔记」Mac下安装mysqlclient">
+                <i class="fa fa-chevron-left"></i> 「环境配置笔记」Mac下安装mysqlclient
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mmm</p>
+              <p class="site-description motion-element" itemprop="description">芝士就是力量</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Actmerce" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:actmerce@icloud.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/ActMerce" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mmm</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
