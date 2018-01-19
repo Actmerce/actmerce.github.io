@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="ckeditor,Django,Python," />
+  <meta name="keywords" content="Django,ckeditor,Python," />
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="之前在副文本上一直使用百度家的UEditor，但是官方在Django以及python3.X上没有做维护，所以换上了ckeditor，使用下来还算方便。 环境信息：  python 3.6.2 Django 2.0.1 django-ckeditor 5.4.0  正文：  用pip安装ckeditor： 1pip install django-ckeditor  在settings的INSTALL">
-<meta name="keywords" content="ckeditor,Django,Python">
+<meta name="keywords" content="Django,ckeditor,Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="「Django富文本」django-ckeditor的使用">
 <meta property="og:url" content="https://actmerce.github.io/2018/01/11/ckeditor-1/index.html">
@@ -88,7 +88,7 @@
 <meta property="og:description" content="之前在副文本上一直使用百度家的UEditor，但是官方在Django以及python3.X上没有做维护，所以换上了ckeditor，使用下来还算方便。 环境信息：  python 3.6.2 Django 2.0.1 django-ckeditor 5.4.0  正文：  用pip安装ckeditor： 1pip install django-ckeditor  在settings的INSTALL">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://actmerce.github.io/images/django-ckeditor.jpg">
-<meta property="og:updated_time" content="2018-01-12T06:38:51.085Z">
+<meta property="og:updated_time" content="2018-01-12T06:45:55.365Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="「Django富文本」django-ckeditor的使用">
 <meta name="twitter:description" content="之前在副文本上一直使用百度家的UEditor，但是官方在Django以及python3.X上没有做维护，所以换上了ckeditor，使用下来还算方便。 环境信息：  python 3.6.2 Django 2.0.1 django-ckeditor 5.4.0  正文：  用pip安装ckeditor： 1pip install django-ckeditor  在settings的INSTALL">
@@ -359,7 +359,7 @@
 <li><p>在<code>settings</code>的<code>INSTALLED_APPS</code>注册：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = [</span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">    <span class="string">'ckeditor'</span>,</span><br><span class="line">    <span class="string">'ckeditor_uploader'</span>,  <span class="comment"># 如果富文本中允许用户上传图片/文件到后台，则需要加上</span></span><br><span class="line">	</span><br><span class="line">	...</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>配置上传文件路径（如果用到上传功能）：<br>ckeditor的上传路径是讲<code>media</code>的路径后边拼接<code>upload_path</code>，也就是说按照下边的配置，最终的上传路径为`/media/uploads/</p>
+<li><p>配置上传文件路径（如果用到上传功能）：<br>ckeditor的上传路径是将<code>media</code>的路径后边拼接<code>upload_path</code>，也就是说按照下边的配置，最终的上传路径为`/media/uploads/</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MEDIA_URL = <span class="string">'/media/'</span></span><br><span class="line">MEDIA_ROOT = os.path.join(BASE_DIR, <span class="string">'media'</span>)</span><br><span class="line">CKEDITOR_UPLOAD_PATH = <span class="string">"uploads/"</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>富文本url配置</p>
@@ -401,9 +401,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/ckeditor/" rel="tag"># ckeditor</a>
-          
             <a href="/tags/Django/" rel="tag"># Django</a>
+          
+            <a href="/tags/ckeditor/" rel="tag"># ckeditor</a>
           
             <a href="/tags/Python/" rel="tag"># Python</a>
           
@@ -427,6 +427,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/19/celery-1/" rel="prev" title="「Celery」集成Django的基本配置及使用">
+                「Celery」集成Django的基本配置及使用 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -494,7 +498,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -516,7 +520,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
