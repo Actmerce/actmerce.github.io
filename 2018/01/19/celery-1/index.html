@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="环境信息：  python 3.6.2 Django 1.9.8 celery 4.1.0  Redis安装及启动：  安装redis：Mac 上通过 brew 进行安装 1brew install redis  启动redis： 1sudo /usr/local/bin/redis-server  查看redis进程及端口：一般默认的端口是6379 1ps aux|grep redis   Dj">
+<meta name="description" content="环境信息：  python 3.6.2 Django 1.9.8 celery 4.1.0  Redis安装及启动：  安装redis：Mac 上通过 brew 进行安装 1brew install redis  启动redis： 1sudo /usr/local/bin/redis-server  查看redis进程及端口：一般默认的端口是6379 1ps aux|grep redis   ce">
 <meta name="keywords" content="Django,Celery">
 <meta property="og:type" content="article">
 <meta property="og:title" content="「Celery」集成Django的基本配置及使用">
 <meta property="og:url" content="https://actmerce.github.io/2018/01/19/celery-1/index.html">
 <meta property="og:site_name" content="m&#39;s blog">
-<meta property="og:description" content="环境信息：  python 3.6.2 Django 1.9.8 celery 4.1.0  Redis安装及启动：  安装redis：Mac 上通过 brew 进行安装 1brew install redis  启动redis： 1sudo /usr/local/bin/redis-server  查看redis进程及端口：一般默认的端口是6379 1ps aux|grep redis   Dj">
+<meta property="og:description" content="环境信息：  python 3.6.2 Django 1.9.8 celery 4.1.0  Redis安装及启动：  安装redis：Mac 上通过 brew 进行安装 1brew install redis  启动redis： 1sudo /usr/local/bin/redis-server  查看redis进程及端口：一般默认的端口是6379 1ps aux|grep redis   ce">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-19T09:22:59.562Z">
+<meta property="og:updated_time" content="2018-01-19T09:31:18.361Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="「Celery」集成Django的基本配置及使用">
-<meta name="twitter:description" content="环境信息：  python 3.6.2 Django 1.9.8 celery 4.1.0  Redis安装及启动：  安装redis：Mac 上通过 brew 进行安装 1brew install redis  启动redis： 1sudo /usr/local/bin/redis-server  查看redis进程及端口：一般默认的端口是6379 1ps aux|grep redis   Dj">
+<meta name="twitter:description" content="环境信息：  python 3.6.2 Django 1.9.8 celery 4.1.0  Redis安装及启动：  安装redis：Mac 上通过 brew 进行安装 1brew install redis  启动redis： 1sudo /usr/local/bin/redis-server  查看redis进程及端口：一般默认的端口是6379 1ps aux|grep redis   ce">
 
 
 
@@ -360,6 +360,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux|grep redis</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
+<p><strong>celery安装：</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U celery[redis]</span><br></pre></td></tr></table></figure></p>
 <p><strong>Django集成Celery配置：</strong></p>
 <p>Django中一个‘incubator’项目的目录如下：</p>
 <pre><code>- incubator/
