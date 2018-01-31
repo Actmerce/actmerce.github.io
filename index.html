@@ -252,6 +252,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/01/30/oss-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mmm">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/30/oss-1/" itemprop="url">「阿里OSS」集成Django的基本配置及使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-30T14:50:31+08:00">
+                2018-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
+                    <span itemprop="name">Web开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>环境信息：</strong></p>
+<ul>
+<li>python 3.6.2</li>
+<li>Django 2.0.1</li>
+</ul>
+<p><strong>依赖库安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install oss2</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol>
+<li>主要的实现思路是通过model 的信号量（signals）监测model 的create 以及update 动作，随后把相应的文件上传至阿里服务器；</li>
+<li>通过Django 的<code>MEDIA_URL</code>来配置上传文件的访问路径。</li>
+</ol>
+<p><strong>signals.py 的配置：</strong></p>
+<p>Django中一个app 内的目录如下：</p>
+<pre><code>- goods/  # 这是一个app
+  - models.py
+  - views.py
+  - signals.py
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> oss2</span><br><span class="line"><span class="keyword">from</span> django.db.models.signals <span class="keyword">import</span> post_save, post_init</span><br><span class="line"><span class="keyword">from</span> django.dispatch <span class="keyword">import</span> receiver</span><br><span class="line"><span class="keyword">from</span> project.settings <span class="keyword">import</span> ACCESS_KEY_ID, ACCESS_KEY_SECRET, ALI_OSS_ENDPOINT, ALI_BUCKET_NAME</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> goods.models <span class="keyword">import</span> GoodsSeries</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取修改前的图片</span></span><br><span class="line"><span class="meta">@receiver(post_init, sender=GoodsSeries)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_original_image</span><span class="params">(instance, **kwargs)</span>:</span></span><br><span class="line">    instance.__original_image = instance.image</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据图片更新情况上传图片</span></span><br><span class="line"><span class="meta">@receiver(post_save, sender=GoodsSeries)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_user</span><span class="params">(sender, instance=None, created=False, **kwargs)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> created <span class="keyword">and</span> instance.__original_image == instance.image:</span><br><span class="line">        <span class="comment"># 图片没有更新</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 新建对象或更新</span></span><br><span class="line">        img = instance.image</span><br><span class="line">        auth = oss2.Auth(ACCESS_KEY_ID, ACCESS_KEY_SECRET)</span><br><span class="line">        img_path = <span class="string">'./media/'</span> + str(img)</span><br><span class="line">        bucket = oss2.Bucket(auth, ALI_OSS_ENDPOINT, ALI_BUCKET_NAME)</span><br><span class="line">        bucket.put_object_from_file(<span class="string">'media/'</span> + img.name, img_path)</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>settings.py 的配置：</strong></p>
+<ol>
+<li><p>阿里OSS秘钥等其他基本配置（具体看官方文档）：</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">ACCESS_KEY_ID = <span class="string">'access key id'</span></span><br><span class="line">ACCESS_KEY_SECRET = <span class="string">'access key secret'</span></span><br><span class="line">ALI_OSS_ENDPOINT = <span class="string">'oss-cn-shenzhen.aliyuncs.com'</span>  <span class="comment"># 具体看文档，这个是类似存放服务器地区的东西</span></span><br><span class="line">ALI_BUCKET_NAME = <span class="string">'bucket'</span>  <span class="comment"># 具体看文档，这个是类似仓库名的东西</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置<code>MEDIA_URL</code>：</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment"># 这个URL需要根据 ALI_OSS_ENDPOINT 、 ALI_BUCKET_NAME 以及 signals.py 填的路径进行配置</span></span><br><span class="line">MEDIA_URL = <span class="string">'http://bucket.oss-cn-shenzhen.aliyuncs.com/media/'</span>  </span><br><span class="line">MEDIA_ROOT = os.path.join(BASE_DIR, <span class="string">'media'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>END</p>
+<hr>
+<p><strong>参考：</strong></p>
+<ul>
+<li><a href="https://help.aliyun.com/document_detail/32026.html?spm=5176.doc52830.6.690.aOMgUK" target="_blank" rel="noopener">阿里OSS Python-SDK使用说明</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/01/19/celery-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -353,17 +529,20 @@
 </ul>
 <p><strong>Redis安装及启动：</strong></p>
 <ol>
-<li><p>安装redis：<br>Mac 上通过 brew 进行安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install redis</span><br></pre></td></tr></table></figure>
+<li><p>安装redis：</p>
+<p> Mac 上通过 brew 进行安装</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install redis</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>启动redis：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/<span class="built_in">local</span>/bin/redis-server</span><br></pre></td></tr></table></figure>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/<span class="built_in">local</span>/bin/redis-server</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>查看redis进程及端口：<br>一般默认的端口是6379</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux|grep redis</span><br></pre></td></tr></table></figure>
+<li><p>查看redis进程及端口：</p>
+<p> 一般默认的端口是6379</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux|grep redis</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p><strong>celery安装：</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U celery[redis]</span><br></pre></td></tr></table></figure></p>
+<p><strong>Celery安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U celery[redis]</span><br></pre></td></tr></table></figure>
 <p><strong>Django集成Celery配置：</strong></p>
 <p>Django中一个‘incubator’项目的目录如下：</p>
 <pre><code>- incubator/
@@ -377,23 +556,30 @@
     - views.py
     - tasks.py
 </code></pre><ol>
-<li><p>配置 <code>incubator/incubator/celery.py</code>：</p>
+<li>配置 <code>incubator/incubator/celery.py</code> ：</li>
+</ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import, unicode_literals</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> django</span><br><span class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> Celery</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">os.environ.setdefault(<span class="string">'DJANGO_SETTINGS_MODULE'</span>, <span class="string">'incubator.settings'</span>)</span><br><span class="line">django.setup()  <span class="comment"># 如果 tasks 里边涉及对 model 的操作，则需要加上 django.setup()</span></span><br><span class="line"></span><br><span class="line">app = Celery(<span class="string">'incubator'</span>)</span><br><span class="line">app.config_from_object(<span class="string">'django.conf:settings'</span>, namespace=<span class="string">'CELERY'</span>)</span><br><span class="line">app.autodiscover_tasks()　　<span class="comment"># 自动加载各个app下边的tasks.py</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置 <code>incubator/incubator/__init__.py:</code></p>
+<ol>
+<li>配置 <code>incubator/incubator/__init__.py</code>:</li>
+</ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import, unicode_literals</span><br><span class="line"></span><br><span class="line"><span class="comment"># This will make sure the app is always imported when</span></span><br><span class="line"><span class="comment"># Django starts so that shared_task will use this app.</span></span><br><span class="line"><span class="keyword">from</span> .celery <span class="keyword">import</span> app <span class="keyword">as</span> celery_app</span><br><span class="line"></span><br><span class="line">__all__ = [<span class="string">'celery_app'</span>]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置 <code>incubator/incubator/settings.py:</code></p>
+<ol>
+<li>配置 <code>incubator/incubator/settings.py</code>:</li>
+</ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置Broker</span></span><br><span class="line">CELERY_BROKER_URL = <span class="string">'redis://127.0.0.1:6379/0'</span>  <span class="comment"># 这里注意redis的端口</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置 <code>incubator/mails/tasks.py</code>：<br>异步发送邮件，同时保存发送邮件时的报错信息</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.core.mail <span class="keyword">import</span> send_mail</span><br><span class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> shared_task</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> EmailError</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@shared_task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send_emails</span><span class="params">(sub, content, to_email_list, from_email, is_active=True)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> is_active:</span><br><span class="line">        <span class="keyword">for</span> mail <span class="keyword">in</span> to_email_list:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                send_mail(sub, content, from_email, [mail])</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                EmailError.objects.create(error_msg=str(e), mail=mail, sub=sub, content=content)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mails.task <span class="keyword">import</span> send_emails</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">send_emails.delay(sub, content, to_mail_list, from_email, is_active)  <span class="comment"># 注意delay</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>配置 <code>incubator/mails/tasks.py</code>：</p>
+<p> 异步发送邮件，同时保存发送邮件时的报错信息</p>
 </li>
 </ol>
-<p><strong>启动Celery</strong><br>在 <code>incubator/</code> 下运行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">celery -A incubator worker -l info</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.core.mail <span class="keyword">import</span> send_mail</span><br><span class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> shared_task</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> EmailError</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@shared_task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send_emails</span><span class="params">(sub, content, to_email_list, from_email, is_active=True)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> is_active:</span><br><span class="line">        <span class="keyword">for</span> mail <span class="keyword">in</span> to_email_list:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                send_mail(sub, content, from_email, [mail])</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                EmailError.objects.create(error_msg=str(e), mail=mail, sub=sub, content=content)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>使用</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mails.task <span class="keyword">import</span> send_emails</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">send_emails.delay(sub, content, to_mail_list, from_email, is_active)  <span class="comment"># 注意delay</span></span><br></pre></td></tr></table></figure>
+<p><strong>启动Celery</strong></p>
+<p>在 <code>incubator/</code> 下运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">celery -A incubator worker -l info</span><br></pre></td></tr></table></figure>
 <hr>
 <p><strong>参考：</strong></p>
 <ul>
@@ -562,7 +748,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> include, re_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 富文本</span></span><br><span class="line">    re_path(<span class="string">r'^ckeditor/'</span>, include(<span class="string">'ckeditor_uploader.urls'</span>)),  <span class="comment"># Django2.0要用're_path'</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在settings中按需定制自己的富文本面板（非必须）：<br>可以按照自己的喜好，定制富文本的编辑工具面板，下边这个是我花了点时间选出了一些常用以及实用的功能。其中具体参数含义可以到官方文档查询。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">CKEDITOR_CONFIGS = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'toolbar_ToolbarConfig'</span>: [</span><br><span class="line">            &#123;<span class="string">'name'</span>: <span class="string">'basic'</span>, <span class="string">'items'</span>: [</span><br><span class="line">                <span class="string">'Font'</span>, <span class="string">'FontSize'</span>, <span class="string">'BGColor'</span>, <span class="string">'TextColor'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Bold'</span>, <span class="string">'Italic'</span>, <span class="string">'Underline'</span>, <span class="string">'Strike'</span>, <span class="string">'Undo'</span>, <span class="string">'Redo'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Strike'</span>, <span class="string">'Subscript'</span>, <span class="string">'Superscript'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Image'</span>, <span class="string">'Flash'</span>, <span class="string">'Table'</span>, <span class="string">'HorizontalRule'</span>, <span class="string">'SpecialChar'</span>,</span><br><span class="line">            ]&#125;,</span><br><span class="line">            <span class="string">'/'</span>,</span><br><span class="line">            &#123;<span class="string">'name'</span>: <span class="string">'custom'</span>, <span class="string">'items'</span>: [</span><br><span class="line">                <span class="string">'Source'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Preview'</span>, <span class="string">'Maximize'</span>,</span><br><span class="line">            ]&#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">'toolbar'</span>: <span class="string">'ToolbarConfig'</span>,</span><br><span class="line">        <span class="string">'width'</span>: <span class="string">'100%'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">CKEDITOR_CONFIGS = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'toolbar_ToolbarConfig'</span>: [</span><br><span class="line">            &#123;<span class="string">'name'</span>: <span class="string">'basic'</span>, <span class="string">'items'</span>: [</span><br><span class="line">                <span class="string">'Font'</span>, <span class="string">'FontSize'</span>, <span class="string">'BGColor'</span>, <span class="string">'TextColor'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'JustifyLeft'</span>, <span class="string">'JustifyCenter'</span>, <span class="string">'JustifyRight'</span>, <span class="string">'JustifyBlock'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Bold'</span>, <span class="string">'Italic'</span>, <span class="string">'Underline'</span>, <span class="string">'Strike'</span>, <span class="string">'Undo'</span>, <span class="string">'Redo'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Strike'</span>, <span class="string">'Subscript'</span>, <span class="string">'Superscript'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Image'</span>, <span class="string">'Flash'</span>, <span class="string">'Table'</span>, <span class="string">'HorizontalRule'</span>, <span class="string">'SpecialChar'</span>,</span><br><span class="line">            ]&#125;,</span><br><span class="line">            <span class="string">'/'</span>,</span><br><span class="line">            &#123;<span class="string">'name'</span>: <span class="string">'custom'</span>, <span class="string">'items'</span>: [</span><br><span class="line">                <span class="string">'Source'</span>,</span><br><span class="line">                <span class="string">'-'</span>,</span><br><span class="line">                <span class="string">'Preview'</span>, <span class="string">'Maximize'</span>,</span><br><span class="line">            ]&#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">'toolbar'</span>: <span class="string">'ToolbarConfig'</span>,</span><br><span class="line">        <span class="string">'width'</span>: <span class="string">'100%'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>field的使用方式：<br>这里的上传功能有个小坑，我开始一直没找着为什么不能开启上传功能</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"><span class="keyword">from</span> ckeditor.fields <span class="keyword">import</span> RichTextField</span><br><span class="line"><span class="keyword">from</span> ckeditor_uploader.fields <span class="keyword">import</span> RichTextUploadingField</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    content_without_upload = RichTextField()  <span class="comment"># 不带上传功能的富文本</span></span><br><span class="line">    content_with_upload = RichTextUploadingField()  <span class="comment"># 带上传功能的富文本（需要先在INSTALL_APP中声明）</span></span><br></pre></td></tr></table></figure>
@@ -1507,7 +1693,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1529,7 +1715,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
