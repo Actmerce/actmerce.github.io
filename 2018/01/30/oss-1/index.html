@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="环境信息：  python 3.6.2 Django 2.0.1  依赖库安装： 1brew install oss2 说明：  主要的实现思路是通过model 的信号量（signals）监测model 的create 以及update 动作，随后把相应的文件上传至阿里服务器； 通过Django 的MEDIA_URL来配置上传文件的访问路径。  signals.py 的配置： Django中一个a">
+<meta name="description" content="环境信息：  python 3.6.2 Django 2.0.1  依赖库安装： 1pip install oss2 说明：  主要的实现思路是通过model 的信号量（signals）监测model 的create 以及update 动作，随后把相应的文件上传至阿里服务器； 通过Django 的MEDIA_URL来配置上传文件的访问路径。  signals.py 的配置： Django中一个ap">
 <meta name="keywords" content="Django,OSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="「阿里OSS」集成Django的基本配置及使用">
 <meta property="og:url" content="https://actmerce.github.io/2018/01/30/oss-1/index.html">
 <meta property="og:site_name" content="m&#39;s blog">
-<meta property="og:description" content="环境信息：  python 3.6.2 Django 2.0.1  依赖库安装： 1brew install oss2 说明：  主要的实现思路是通过model 的信号量（signals）监测model 的create 以及update 动作，随后把相应的文件上传至阿里服务器； 通过Django 的MEDIA_URL来配置上传文件的访问路径。  signals.py 的配置： Django中一个a">
+<meta property="og:description" content="环境信息：  python 3.6.2 Django 2.0.1  依赖库安装： 1pip install oss2 说明：  主要的实现思路是通过model 的信号量（signals）监测model 的create 以及update 动作，随后把相应的文件上传至阿里服务器； 通过Django 的MEDIA_URL来配置上传文件的访问路径。  signals.py 的配置： Django中一个ap">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-31T07:16:33.381Z">
+<meta property="og:updated_time" content="2018-01-31T07:18:33.500Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="「阿里OSS」集成Django的基本配置及使用">
-<meta name="twitter:description" content="环境信息：  python 3.6.2 Django 2.0.1  依赖库安装： 1brew install oss2 说明：  主要的实现思路是通过model 的信号量（signals）监测model 的create 以及update 动作，随后把相应的文件上传至阿里服务器； 通过Django 的MEDIA_URL来配置上传文件的访问路径。  signals.py 的配置： Django中一个a">
+<meta name="twitter:description" content="环境信息：  python 3.6.2 Django 2.0.1  依赖库安装： 1pip install oss2 说明：  主要的实现思路是通过model 的信号量（signals）监测model 的create 以及update 动作，随后把相应的文件上传至阿里服务器； 通过Django 的MEDIA_URL来配置上传文件的访问路径。  signals.py 的配置： Django中一个ap">
 
 
 
@@ -348,7 +348,7 @@
 <li>Django 2.0.1</li>
 </ul>
 <p><strong>依赖库安装：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install oss2</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install oss2</span><br></pre></td></tr></table></figure>
 <p><strong>说明：</strong></p>
 <ol>
 <li>主要的实现思路是通过model 的信号量（signals）监测model 的create 以及update 动作，随后把相应的文件上传至阿里服务器；</li>
