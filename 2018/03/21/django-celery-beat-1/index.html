@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://actmerce.github.io/images/celery-interval.jpg">
 <meta property="og:image" content="https://actmerce.github.io/images/celery-crontab.jpg">
 <meta property="og:image" content="https://actmerce.github.io/images/celery-task.jpg">
-<meta property="og:updated_time" content="2018-03-21T04:55:26.708Z">
+<meta property="og:updated_time" content="2018-03-21T04:59:45.297Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="「Celery」django-celery-beat配置定时任务">
 <meta name="twitter:description" content="环境信息：  python 3.6.2 Django 1.11.3 celery 4.1.0 django-celery-beat 1.1.1  准备工作：  安装redis； 启动redis； 安装celery； Django集成Celery； 启动celery；  以上步骤参考：「Celery」集成Django的基本配置及使用，同时接下来django-celery-beat的配置是在上述链接的">
@@ -407,6 +407,7 @@
 <p> 随后再新建<code>periodic task</code>：</p>
 <p> <img src="https://actmerce.github.io/images/celery-task.jpg" alt="crontab-list"></p>
 <p> 需要注意<code>Task name</code>字段，为任务的路径或者名字，如果按照上述步骤配置的话，<code>Task name</code>应为<code>mails.tasks.do_something</code>。如果使用了<code>@shared_task(name=&#39;new_task_name&#39;)</code>进行重命名，那么<code>Task name</code>应为<code>new_task_name</code></p>
+<p> 另外，如果是带参的定时任务，可以通过<code>Arguments</code>、<code>Keyword arguments</code>进行传参。</p>
 </li>
 </ol>
 <p><strong>启动Celery</strong></p>

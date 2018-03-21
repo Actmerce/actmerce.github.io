@@ -406,6 +406,7 @@
 <p> 随后再新建<code>periodic task</code>：</p>
 <p> <img src="https://actmerce.github.io/images/celery-task.jpg" alt="crontab-list"></p>
 <p> 需要注意<code>Task name</code>字段，为任务的路径或者名字，如果按照上述步骤配置的话，<code>Task name</code>应为<code>mails.tasks.do_something</code>。如果使用了<code>@shared_task(name=&#39;new_task_name&#39;)</code>进行重命名，那么<code>Task name</code>应为<code>new_task_name</code></p>
+<p> 另外，如果是带参的定时任务，可以通过<code>Arguments</code>、<code>Keyword arguments</code>进行传参。</p>
 </li>
 </ol>
 <p><strong>启动Celery</strong></p>
