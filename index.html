@@ -40,7 +40,7 @@
 
   
   
-  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/m-180.png?v=5.1.3">
@@ -181,7 +181,7 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="" rel="section">
+          <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -191,7 +191,7 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="" rel="section">
+          <a href="/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -201,7 +201,7 @@
       
         
         <li class="menu-item menu-item-categories">
-          <a href="" rel="section">
+          <a href="/categories/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
@@ -211,7 +211,7 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="" rel="section">
+          <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -252,12 +252,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io2018/03/21/django-celery-beat-1/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/06/11/oss-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +271,177 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="2018/03/21/django-celery-beat-1/" itemprop="url">「Celery」django-celery-beat配置定时任务</a></h1>
+                <a class="post-title-link" href="/2018/06/11/oss-2/" itemprop="url">「阿里OSS」集成Django的基本配置及使用-2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-11T20:00:28+08:00">
+                2018-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
+                    <span itemprop="name">Web开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>###前言：</p>
+<p>之前曾经写过的<a href="https://actmerce.github.io/2018/01/30/oss-1/">「阿里OSS」集成Django的基本配置及使用</a>，里边在使用OSS是通过Django的两个信号量（signals）去实现的，一个<code>post_init</code>获取保存动作前的图片，一个<code>post_save</code>获取保存动作后的图片，通过对比两张图片，如果发生变化的话则将图片进行上传。</p>
+<p>实现的思路没什么问题，在后期的使用过程中主要有如下两个问题发生：</p>
+<ol>
+<li><code>post_init</code>信号会在除了保存动作以外的情况发生，这样一直去对<code>post_init</code>进行监听对整个的效率有影响；</li>
+<li>如果项目中大量的ImageField都需要用到OSS的话，这样的信号量复用起来太糟糕。</li>
+</ol>
+<p>###解决思路：</p>
+<ol>
+<li>通过自定义一个<code>ImageField</code>，从而更灵活去对OSS进行配置；</li>
+<li>找到<code>ImageField</code>对象在进行<code>save</code>动作的方法，在其后上传图片即可；</li>
+</ol>
+<p>###实现：</p>
+<ol>
+<li><p>自定义一个’ImageField’类：</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> oss2</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.db.models <span class="keyword">import</span> ImageField</span><br><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OssImageField</span><span class="params">(ImageField)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pre_save</span><span class="params">(self, model_instance, add)</span>:</span></span><br><span class="line">        file = getattr(model_instance, self.attname)</span><br><span class="line">        <span class="keyword">if</span> file <span class="keyword">and</span> <span class="keyword">not</span> file._committed:  <span class="comment"># 这行代码判断文件是否有改动</span></span><br><span class="line">            file.save(file.name, file.file, save=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 以下代码块为自定义部分：上传到oss</span></span><br><span class="line">            auth = oss2.Auth(settings.ACCESS_KEY_ID, settings.ACCESS_KEY_SECRET)</span><br><span class="line">            bucket = oss2.Bucket(auth, settings.ALI_OSS_ENDPOINT, settings.ALI_BUCKET_NAME)</span><br><span class="line">            bucket.put_object_from_file(<span class="string">'media/'</span> + file.name, file.path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> file</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用：</p>
+<p> 由于<code>OssImageField</code>继承的是django的model中的<code>ImageField</code>类，所以使用的时候就跟跟普通的Field一样使用，如下：</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Designer</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">50</span>, verbose_name=<span class="string">"设计师名称"</span>)</span><br><span class="line">    country = models.CharField(max_length=<span class="number">50</span>, verbose_name=<span class="string">"国籍"</span>)</span><br><span class="line">    portrait = OssImageField(upload_to=<span class="string">'designer/portrait/%Y/%m'</span>, verbose_name=<span class="string">"肖像"</span>, help_text=<span class="string">'尺寸500*500为宜'</span>)</span><br><span class="line">    bg_image = OssImageField(upload_to=<span class="string">'designer/bg_image/%Y/%m'</span>, verbose_name=<span class="string">"背景图片"</span>, help_text=<span class="string">'尺寸1000*1000为宜'</span>)</span><br><span class="line">    desc = models.TextField(verbose_name=<span class="string">'设计师描述'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        verbose_name = <span class="string">'设计师'</span></span><br><span class="line">        verbose_name_plural = verbose_name</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关于OSS的基本配置请看上一篇文章</p>
+</li>
+</ol>
+<hr>
+<p><strong>参考：</strong></p>
+<ul>
+<li><a href="https://actmerce.github.io/2018/01/30/oss-1/">「阿里OSS」集成Django的基本配置及使用-1</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/03/21/django-celery-beat-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mmm">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="m's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/21/django-celery-beat-1/" itemprop="url">「Celery」django-celery-beat配置定时任务</a></h1>
         
 
         <div class="post-meta">
@@ -306,7 +476,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/Web开发/" itemprop="url" rel="index">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
                     <span itemprop="name">Web开发</span>
                   </a>
                 </span>
@@ -470,12 +640,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io2018/01/30/oss-1/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/01/30/oss-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -489,7 +659,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="2018/01/30/oss-1/" itemprop="url">「阿里OSS」集成Django的基本配置及使用</a></h1>
+                <a class="post-title-link" href="/2018/01/30/oss-1/" itemprop="url">「阿里OSS」集成Django的基本配置及使用-1</a></h1>
         
 
         <div class="post-meta">
@@ -524,7 +694,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/Web开发/" itemprop="url" rel="index">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
                     <span itemprop="name">Web开发</span>
                   </a>
                 </span>
@@ -599,8 +769,11 @@
  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment"># 这个URL需要根据 ALI_OSS_ENDPOINT 、 ALI_BUCKET_NAME 以及 signals.py 填的路径进行配置</span></span><br><span class="line">MEDIA_URL = <span class="string">'http://bucket.oss-cn-shenzhen.aliyuncs.com/media/'</span>  </span><br><span class="line">MEDIA_ROOT = os.path.join(BASE_DIR, <span class="string">'media'</span>)</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>END</p>
 <hr>
+<p><strong>后续：</strong></p>
+<ul>
+<li><a href="https://actmerce.github.io/2018/06/11/oss-2/">「阿里OSS」集成Django的基本配置及使用-2</a></li>
+</ul>
 <p><strong>参考：</strong></p>
 <ul>
 <li><a href="https://help.aliyun.com/document_detail/32026.html?spm=5176.doc52830.6.690.aOMgUK" target="_blank" rel="noopener">阿里OSS Python-SDK使用说明</a></li>
@@ -653,12 +826,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io2018/01/19/celery-1/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/01/19/celery-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -672,7 +845,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="2018/01/19/celery-1/" itemprop="url">「Celery」集成Django的基本配置及使用</a></h1>
+                <a class="post-title-link" href="/2018/01/19/celery-1/" itemprop="url">「Celery」集成Django的基本配置及使用</a></h1>
         
 
         <div class="post-meta">
@@ -707,7 +880,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/Web开发/" itemprop="url" rel="index">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
                     <span itemprop="name">Web开发</span>
                   </a>
                 </span>
@@ -858,12 +1031,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io2018/01/11/ckeditor-1/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/01/11/ckeditor-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -877,7 +1050,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="2018/01/11/ckeditor-1/" itemprop="url">「Django富文本」django-ckeditor的使用</a></h1>
+                <a class="post-title-link" href="/2018/01/11/ckeditor-1/" itemprop="url">「Django富文本」django-ckeditor的使用</a></h1>
         
 
         <div class="post-meta">
@@ -912,7 +1085,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/Web开发/" itemprop="url" rel="index">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
                     <span itemprop="name">Web开发</span>
                   </a>
                 </span>
@@ -1039,12 +1212,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io2018/01/02/env-1/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/01/02/env-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1058,7 +1231,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="2018/01/02/env-1/" itemprop="url">「环境配置笔记」Mac下安装mysqlclient</a></h1>
+                <a class="post-title-link" href="/2018/01/02/env-1/" itemprop="url">「环境配置笔记」Mac下安装mysqlclient</a></h1>
         
 
         <div class="post-meta">
@@ -1093,7 +1266,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/Web开发/" itemprop="url" rel="index">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
                     <span itemprop="name">Web开发</span>
                   </a>
                 </span>
@@ -1189,12 +1362,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io2018/01/02/unittest-1/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2018/01/02/unittest-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1208,7 +1381,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="2018/01/02/unittest-1/" itemprop="url">「unittest开发笔记」芝士点备忘</a></h1>
+                <a class="post-title-link" href="/2018/01/02/unittest-1/" itemprop="url">「unittest开发笔记」芝士点备忘</a></h1>
         
 
         <div class="post-meta">
@@ -1243,7 +1416,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/基础/" itemprop="url" rel="index">
+                  <a href="/categories/基础/" itemprop="url" rel="index">
                     <span itemprop="name">基础</span>
                   </a>
                 </span>
@@ -1416,12 +1589,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io2017/12/18/pandas-1/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2017/12/18/pandas-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1435,7 +1608,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="2017/12/18/pandas-1/" itemprop="url">「pandas笔记」对比两个dataframe</a></h1>
+                <a class="post-title-link" href="/2017/12/18/pandas-1/" itemprop="url">「pandas笔记」对比两个dataframe</a></h1>
         
 
         <div class="post-meta">
@@ -1470,7 +1643,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/基础/" itemprop="url" rel="index">
+                  <a href="/categories/基础/" itemprop="url" rel="index">
                     <span itemprop="name">基础</span>
                   </a>
                 </span>
@@ -1579,12 +1752,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io2017/12/06/django-xadmin-2/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2017/12/06/django-xadmin-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1598,7 +1771,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="2017/12/06/django-xadmin-2/" itemprop="url">「xadmin开发笔记」后台添加数据时外键的回填</a></h1>
+                <a class="post-title-link" href="/2017/12/06/django-xadmin-2/" itemprop="url">「xadmin开发笔记」后台添加数据时外键的回填</a></h1>
         
 
         <div class="post-meta">
@@ -1633,7 +1806,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/Web开发/" itemprop="url" rel="index">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
                     <span itemprop="name">Web开发</span>
                   </a>
                 </span>
@@ -1726,12 +1899,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io2017/12/05/django-xadmin-1/">
+    <link itemprop="mainEntityOfPage" href="https://actmerce.github.io/2017/12/05/django-xadmin-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="mmm">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1745,7 +1918,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="2017/12/05/django-xadmin-1/" itemprop="url">「xadmin开发笔记」Admin中重载方法可实现的一些功能</a></h1>
+                <a class="post-title-link" href="/2017/12/05/django-xadmin-1/" itemprop="url">「xadmin开发笔记」Admin中重载方法可实现的一些功能</a></h1>
         
 
         <div class="post-meta">
@@ -1780,7 +1953,7 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/Web开发/" itemprop="url" rel="index">
+                  <a href="/categories/Web开发/" itemprop="url" rel="index">
                     <span itemprop="name">Web开发</span>
                   </a>
                 </span>
@@ -1918,7 +2091,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1928,7 +2101,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="categories/index.html">
+                <a href="/categories/index.html">
                   <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
@@ -1939,7 +2112,7 @@
               
               
               <div class="site-state-item site-state-tags">
-                <a href="tags/index.html">
+                <a href="/tags/index.html">
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
@@ -2084,60 +2257,60 @@
 
   
   
-    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
   
 
   
   
-    <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
   
 
   
   
-    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
 
   
 
 
-  <script type="text/javascript" src="js/src/utils.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
 
-  <script type="text/javascript" src="js/src/motion.js?v=5.1.3"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="js/src/affix.js?v=5.1.3"></script>
-
-  <script type="text/javascript" src="js/src/schemes/pisces.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
 
 
 
   
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
 
   
 
 
-  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
 
 
 
