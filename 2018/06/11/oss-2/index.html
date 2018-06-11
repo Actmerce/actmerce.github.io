@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="###前言： 之前曾经写过的「阿里OSS」集成Django的基本配置及使用，里边在使用OSS是通过Django的两个信号量（signals）去实现的，一个post_init获取保存动作前的图片，一个post_save获取保存动作后的图片，通过对比两张图片，如果发生变化的话则将图片进行上传。 实现的思路没什么问题，在后期的使用过程中主要有如下两个问题发生：  post_init信号会在除了保存动作以">
+<meta name="description" content="前言：之前曾经写过的「阿里OSS」集成Django的基本配置及使用，里边在使用OSS是通过Django的两个信号量（signals）去实现的，一个post_init获取保存动作前的图片，一个post_save获取保存动作后的图片，通过对比两张图片，如果发生变化的话则将图片进行上传。 实现的思路没什么问题，在后期的使用过程中主要有如下两个问题发生：  post_init信号会在除了保存动作以外的情况">
 <meta name="keywords" content="Django,OSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="「阿里OSS」集成Django的基本配置及使用-2">
 <meta property="og:url" content="https://actmerce.github.io/2018/06/11/oss-2/index.html">
 <meta property="og:site_name" content="m&#39;s blog">
-<meta property="og:description" content="###前言： 之前曾经写过的「阿里OSS」集成Django的基本配置及使用，里边在使用OSS是通过Django的两个信号量（signals）去实现的，一个post_init获取保存动作前的图片，一个post_save获取保存动作后的图片，通过对比两张图片，如果发生变化的话则将图片进行上传。 实现的思路没什么问题，在后期的使用过程中主要有如下两个问题发生：  post_init信号会在除了保存动作以">
+<meta property="og:description" content="前言：之前曾经写过的「阿里OSS」集成Django的基本配置及使用，里边在使用OSS是通过Django的两个信号量（signals）去实现的，一个post_init获取保存动作前的图片，一个post_save获取保存动作后的图片，通过对比两张图片，如果发生变化的话则将图片进行上传。 实现的思路没什么问题，在后期的使用过程中主要有如下两个问题发生：  post_init信号会在除了保存动作以外的情况">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-11T12:01:15.107Z">
+<meta property="og:updated_time" content="2018-06-11T12:06:32.736Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="「阿里OSS」集成Django的基本配置及使用-2">
-<meta name="twitter:description" content="###前言： 之前曾经写过的「阿里OSS」集成Django的基本配置及使用，里边在使用OSS是通过Django的两个信号量（signals）去实现的，一个post_init获取保存动作前的图片，一个post_save获取保存动作后的图片，通过对比两张图片，如果发生变化的话则将图片进行上传。 实现的思路没什么问题，在后期的使用过程中主要有如下两个问题发生：  post_init信号会在除了保存动作以">
+<meta name="twitter:description" content="前言：之前曾经写过的「阿里OSS」集成Django的基本配置及使用，里边在使用OSS是通过Django的两个信号量（signals）去实现的，一个post_init获取保存动作前的图片，一个post_save获取保存动作后的图片，通过对比两张图片，如果发生变化的话则将图片进行上传。 实现的思路没什么问题，在后期的使用过程中主要有如下两个问题发生：  post_init信号会在除了保存动作以外的情况">
 
 
 
@@ -342,21 +342,18 @@
       
 
       
-        <p>###前言：</p>
-<p>之前曾经写过的<a href="https://actmerce.github.io/2018/01/30/oss-1/">「阿里OSS」集成Django的基本配置及使用</a>，里边在使用OSS是通过Django的两个信号量（signals）去实现的，一个<code>post_init</code>获取保存动作前的图片，一个<code>post_save</code>获取保存动作后的图片，通过对比两张图片，如果发生变化的话则将图片进行上传。</p>
+        <h3 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h3><p>之前曾经写过的<a href="https://actmerce.github.io/2018/01/30/oss-1/">「阿里OSS」集成Django的基本配置及使用</a>，里边在使用OSS是通过Django的两个信号量（signals）去实现的，一个<code>post_init</code>获取保存动作前的图片，一个<code>post_save</code>获取保存动作后的图片，通过对比两张图片，如果发生变化的话则将图片进行上传。</p>
 <p>实现的思路没什么问题，在后期的使用过程中主要有如下两个问题发生：</p>
 <ol>
 <li><code>post_init</code>信号会在除了保存动作以外的情况发生，这样一直去对<code>post_init</code>进行监听对整个的效率有影响；</li>
 <li>如果项目中大量的ImageField都需要用到OSS的话，这样的信号量复用起来太糟糕。</li>
 </ol>
-<p>###解决思路：</p>
-<ol>
+<h3 id="解决思路："><a href="#解决思路：" class="headerlink" title="解决思路："></a>解决思路：</h3><ol>
 <li>通过自定义一个<code>ImageField</code>，从而更灵活去对OSS进行配置；</li>
 <li>找到<code>ImageField</code>对象在进行<code>save</code>动作的方法，在其后上传图片即可；</li>
 </ol>
-<p>###实现：</p>
-<ol>
-<li><p>自定义一个’ImageField’类：</p>
+<h3 id="实现："><a href="#实现：" class="headerlink" title="实现："></a>实现：</h3><ol>
+<li><p>自定义一个<code>ImageField</code>类：</p>
  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> oss2</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.db.models <span class="keyword">import</span> ImageField</span><br><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OssImageField</span><span class="params">(ImageField)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pre_save</span><span class="params">(self, model_instance, add)</span>:</span></span><br><span class="line">        file = getattr(model_instance, self.attname)</span><br><span class="line">        <span class="keyword">if</span> file <span class="keyword">and</span> <span class="keyword">not</span> file._committed:  <span class="comment"># 这行代码判断文件是否有改动</span></span><br><span class="line">            file.save(file.name, file.file, save=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 以下代码块为自定义部分：上传到oss</span></span><br><span class="line">            auth = oss2.Auth(settings.ACCESS_KEY_ID, settings.ACCESS_KEY_SECRET)</span><br><span class="line">            bucket = oss2.Bucket(auth, settings.ALI_OSS_ENDPOINT, settings.ALI_BUCKET_NAME)</span><br><span class="line">            bucket.put_object_from_file(<span class="string">'media/'</span> + file.name, file.path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> file</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>使用：</p>
